@@ -54,6 +54,7 @@ class RequestHandller
     end
     if query["q"] === "set" then
       @csv.setValue(query["fn"], query["cal"], query["we"]) #ex. rdiet.rb?q=set&fn=rice&cal=500
+      @render.returnIndex()
     end
   end
 end
@@ -65,12 +66,15 @@ class Renderer
   def index
     print $htmlIndex
     print "<div style='font-size:300%'>" << @csv.calcRest().to_s << " kcal</div>"
+    print "目標摂取カロリー: " << TARGETCAL.to_s << "kcal"
   end
   def input
     print $htmlInput
   end
+  def returnIndex
+    print "<meta http-equiv='refresh' content='1;URL=rdiet.rb'>"
+  end
 end
-
 
 req = RequestHandller.new()
 req.handleByHash(qs)

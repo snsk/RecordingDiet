@@ -14,10 +14,6 @@ $htmlIndex = <<EOFINDEX
 <hr>
 EOFINDEX
 
-
-
-
-
 $htmlInput = <<EOFINPUT
 <hr>
 <form action="rdiet.rb" method="get">
