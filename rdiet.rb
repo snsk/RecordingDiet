@@ -12,26 +12,24 @@ TARGETCAL = 2000
 
 print "Content-type: text/html\n\n"
 
-class Renderer
-  def index
-    print $htmlIndex
-  end
-end
-
 class CsvMigrator
-  def calcRest
+  def calcRest #TARGETCAL から今日取得したカロリー　を引いた値を返す
     file = open("log.csv")
     lines = file.readlines
-    lines.each_with_index {|line, i| #CSV読み込んで二次元配列に変換
+    lines.each_with_index {|line, i|
       lines[i] = line.split(",")
     }
-    todayLines = Array.new() #今日の列を抽出
+    todayLines = Array.new()
     lines.each{|line|
       if line.include?(Date.today.strftime) then
         todayLines.push(line)
       end
     }
-    p todayLines
+    todayTotalCal = 0
+    todayLines.each{|line|
+      todayTotalCal += line[2].to_i
+    }
+    return TARGETCAL - todayTotalCal
   end
   def setValue(foodname, calorie, weight)
     if weight === "" then
@@ -51,8 +49,8 @@ class RequestHandller
   end
   def handleByHash(query)
     if query["q"] === "" then #view index page
-      @csv.calcRest()
       @render.index()
+      @render.input()
     end
     if query["q"] === "set" then
       @csv.setValue(query["fn"], query["cal"], query["we"]) #ex. rdiet.rb?q=set&fn=rice&cal=500
@@ -60,11 +58,22 @@ class RequestHandller
   end
 end
 
+class Renderer
+  def initialize
+    @csv = CsvMigrator.new()
+  end
+  def index
+    print $htmlIndex
+    print "<div style='font-size:300%'>" << @csv.calcRest().to_s << " kcal</div>"
+  end
+  def input
+    print $htmlInput
+  end
+end
+
+
 req = RequestHandller.new()
 req.handleByHash(qs)
-
-#csv = CsvMigrator.new()
-#csv.calcRest()
 
 if FileTest.exist?("log.csv") then
   #
