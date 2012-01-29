@@ -12,7 +12,7 @@ TARGETCAL = 2000
 
 print "Content-type: text/html\n\n"
 
-class CsvMigrator
+class CsvMigrator #CSVをごにょごにょするひと
   def calcRest(whens) #TARGETCAL から今日取得したカロリー　を引いた値を返す
     file = open("log.csv")
     lines = file.readlines
@@ -55,7 +55,7 @@ class CsvMigrator
   end
 end
 
-class RequestHandller
+class RequestHandller #リクエストをさばくひと
   def initialize
     @render = Renderer.new()
     @csv = CsvMigrator.new()
@@ -72,7 +72,7 @@ class RequestHandller
   end
 end
 
-class Renderer
+class Renderer #HTMLを書きだすひと
   def initialize
     @csv = CsvMigrator.new()
   end
