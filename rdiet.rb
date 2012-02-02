@@ -6,21 +6,21 @@ require 'cgi'
 require 'csv'
 require 'htmls'
 require 'date'
-
-qs = CGI.new
 TARGETCAL = 2000
 
-print "Content-type: text/html\n\n"
-
 class CsvMigrator #CSVをごにょごにょするひと
-  def calcRest(whens) #TARGETCAL から今日取得したカロリー　を引いた値を返す
-    file = open("log.csv")
-    lines = file.readlines
-    lines.each_with_index {|line, i|
-      lines[i] = line.split(",")
+  def initialize
+    file = open("log.csv")    
+    @lines = file.readlines 
+    @lines.each_with_index {|line, i|
+      @lines[i] = line.split(",")
     }
+  end
+  def getRecentFoods(num) #TODO
+  end
+  def calcRest(whens) #TARGETCAL から今日取得したカロリー　を引いた値を返す
     todayLines = Array.new()
-    lines.each{|line|
+    @lines.each{|line|
       if whens === "today" then
         if line.include?(Date.today.strftime) then
           todayLines.push(line)
@@ -90,7 +90,11 @@ class Renderer #HTMLを書きだすひと
   end
 end
 
+#main
+
+print "Content-type: text/html\n\n"
 req = RequestHandller.new()
+qs = CGI.new
 req.handleByHash(qs)
 
 if FileTest.exist?("log.csv") then
