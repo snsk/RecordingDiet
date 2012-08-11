@@ -6,6 +6,7 @@ require 'cgi'
 require 'csv'
 require 'htmls'
 require 'date'
+
 TARGETCAL = 2000
 
 class CsvMigrator #CSVをごにょごにょするひと
